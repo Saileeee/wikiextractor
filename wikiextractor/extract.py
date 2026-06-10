@@ -30,7 +30,7 @@ import time
 # ----------------------------------------------------------------------
 
 # match tail after wikilink
-tailRE = re.compile('r\w+')
+tailRE = re.compile(r'\w+')
 syntaxhighlight = re.compile('&lt;syntaxhighlight .*?&gt;(.*?)&lt;/syntaxhighlight&gt;', re.DOTALL)
 
 ## PARAMS ####################################################################
