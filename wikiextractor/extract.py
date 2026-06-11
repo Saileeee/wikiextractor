@@ -1000,7 +1000,7 @@ class Extractor():
                 self.recursion_exceeded_2_errs,
                 self.recursion_exceeded_3_errs)
         if any(errs):
-            logging.warn("Template errors in article '%s' (%s): title(%d) recursion(%d, %d, %d)",
+            logging.warning("Template errors in article '%s' (%s): title(%d) recursion(%d, %d, %d)",
                          self.title, self.id, *errs)
 
     # ----------------------------------------------------------------------
@@ -1711,7 +1711,7 @@ def sharp_invoke(module, function, frame):
             # template invocation
             templateTitle = fullyQualifiedTemplateTitle(function)
             if not templateTitle:
-                logging.warn("Template with empty title")
+                logging.warning("Template with empty title")
             pair = next((x for x in frame if x[0] == templateTitle), None)
             if pair:
                 params = pair[1]
@@ -1855,5 +1855,5 @@ def define_template(title, page):
 
     if text:
         if title in templates and templates[title] != text:
-            logging.warn('Redefining: %s', title)
+            logging.warning('Redefining: %s', title)
         templates[title] = text
