@@ -120,6 +120,10 @@ def clean(extractor, text, expand_templates=False, html_safe=True):
         text = italic_quote.sub(r'"\1"', text)
         text = italic.sub(r'"\1"', text)
         text = quote_quote.sub(r'"\1"', text)
+
+    # Handle subscript/superscript
+    text = sub_sup.sub(' ', text)
+
     # residuals of unbalanced quotes
     text = text.replace("'''", '').replace("''", '"')
 
@@ -668,7 +672,7 @@ ignoredTags = (
     'abbr', 'b', 'big', 'blockquote', 'center', 'cite', 'div', 'em',
     'font', 'h1', 'h2', 'h3', 'h4', 'hiero', 'i', 'kbd', 'nowiki',
     'p', 'plaintext', 's', 'span', 'strike', 'strong',
-    'sub', 'sup', 'tt', 'u', 'var'
+    'tt', 'u', 'var'
 )
 
 placeholder_tags = {'math': 'formula', 'code': 'codice'}
@@ -783,6 +787,9 @@ bold = re.compile(r"'''(.*?)'''")
 italic_quote = re.compile(r"''\"([^\"]*?)\"''")
 italic = re.compile(r"''(.*?)''")
 quote_quote = re.compile(r'""([^"]*?)""')
+
+#matches subscript/superscript
+sub_sup = re.compile(r'<\s*/?\s*(?:sub|sup)\b[^>]*>', re.IGNORECASE | re.DOTALL)
 
 # Matches space
 spaces = re.compile(r' {2,}')
