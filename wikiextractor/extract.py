@@ -122,7 +122,9 @@ def clean(extractor, text, expand_templates=False, html_safe=True):
         text = quote_quote.sub(r'"\1"', text)
 
     # Handle subscript/superscript
-    text = sub_sup.sub(' ', text)
+    text = subscript.sub(r' \1 ', text)
+    text = superscript.sub(r' \1 ', text)
+    #text = sub_sup.sub(' ', text)
 
     # residuals of unbalanced quotes
     text = text.replace("'''", '').replace("''", '"')
@@ -789,7 +791,9 @@ italic = re.compile(r"''(.*?)''")
 quote_quote = re.compile(r'""([^"]*?)""')
 
 #matches subscript/superscript
-sub_sup = re.compile(r'<\s*/?\s*(?:sub|sup)\b[^>]*>', re.IGNORECASE | re.DOTALL)
+subscript = re.compile(r'<sub>(.*?)</sub>', re.IGNORECASE | re.DOTALL)
+superscript = re.compile(r'<sup>(.*?)</sup>', re.IGNORECASE | re.DOTALL)
+#sub_sup = re.compile(r'<\s*/?\s*(?:sub|sup)\b[^>]*>', re.IGNORECASE | re.DOTALL)
 
 # Matches space
 spaces = re.compile(r' {2,}')
