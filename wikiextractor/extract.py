@@ -109,6 +109,11 @@ def clean(extractor, text, expand_templates=False, html_safe=True):
         cur = end
     text = res + unescape(text[cur:])
 
+    # Handle subscript/superscript
+    text = subscript.sub(r' \1 ', text)
+    text = superscript.sub(r' \1 ', text)
+    #text = sub_sup.sub(' ', text)
+
     # Handle bold/italic/quote
     if extractor.HtmlFormatting:
         text = bold_italic.sub(r'<b>\1</b>', text)
@@ -119,15 +124,22 @@ def clean(extractor, text, expand_templates=False, html_safe=True):
         text = bold.sub(r'\1', text)
         text = italic_quote.sub(r'"\1"', text)
         text = italic.sub(r'"\1"', text)
-        text = quote_quote.sub(r'"\1"', text)
-
-    # Handle subscript/superscript
-    text = subscript.sub(r' \1 ', text)
-    text = superscript.sub(r' \1 ', text)
-    #text = sub_sup.sub(' ', text)
+        text = quote_quote.sub(r'"\1"', text) 
 
     # residuals of unbalanced quotes
     text = text.replace("'''", '').replace("''", '"')
+
+    #remove non-alphanumeric characters, except for . ' -
+    #text = re.sub(r"[^a-zA-Z0-9\.'\-]", "", text)
+
+    #replace ' and - with a space
+    #text = re.sub(r"[\'\-]", " ", text)
+
+    #replace periods with spaces in abreviations CHECK THIS
+    #text = re.sub(r'([a-zA-Z])\.', r'\1 ', text)
+
+    #remove numbers from formulas CHECK THIS
+    text = re.sub(r'(formula)_[\d]+', '\1', text)
 
     # Collect spans
 
