@@ -205,6 +205,7 @@ def load_templates(file, output_file=None):
     inText = False
     if output_file:
         output = open(output_file, 'w')
+        output.write('<mediawiki>\n')
     for line in file:
         #line = line.decode('utf-8')
         if '<' not in line:  # faster than doing re.search()
@@ -258,6 +259,7 @@ def load_templates(file, output_file=None):
             if articles % 100000 == 0:
                 logging.info("Preprocessed %d pages", articles)
     if output_file:
+        output.write('</mediawiki>\n')
         output.close()
         logging.info("Saved %d templates to '%s'", templates, output_file)
     return templates
