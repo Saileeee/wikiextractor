@@ -53,6 +53,8 @@ The option `--templates` extracts the templates to a local file, which can be re
 
 The output is stored in several files of similar size in a given directory.
 Each file will contains several documents in this [document format](https://github.com/attardi/wikiextractor/wiki/File-Format).
+Extracted article body text is converted to lowercase. Titles, metadata, HTML
+markup, and URLs preserve their original casing.
 
 ```
 usage: wikiextractor [-h] [-o OUTPUT] [-b n[KMG]] [-c] [--json] [--html] [-l] [-ns ns1,ns2]

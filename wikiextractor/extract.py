@@ -390,6 +390,26 @@ wgUrlProtocols = [
     'svn://', 'tel:', 'telnet://', 'urn:', 'worldwind://', 'xmpp:', '//'
 ]
 
+protected_text = re.compile(
+    r'&lt;.*?&gt;|<[^>]*>|&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]+);|'
+    r'(?:' + '|'.join(re.escape(protocol) for protocol in wgUrlProtocols) +
+    r')[^\s<>"\']+',
+    re.IGNORECASE
+)
+
+
+def lowercase_visible_text(text):
+    """Lowercase visible text while preserving markup, entities, and URLs."""
+    result = []
+    offset = 0
+    for match in protected_text.finditer(text):
+        result.append(text[offset:match.start()].lower())
+        result.append(match.group())
+        offset = match.end()
+    result.append(text[offset:].lower())
+    return ''.join(result)
+
+
 # from: https://doc.wikimedia.org/mediawiki-core/master/php/Parser_8php_source.html
 
 # Constants needed for external link processing
@@ -986,6 +1006,7 @@ class Extractor():
                      html_safe=html_safe)
 
         text = compact(text, mark_headers=mark_headers)
+        text = [lowercase_visible_text(paragraph) for paragraph in text]
         return text
 
     def extract(self, out, html_safe=True):
